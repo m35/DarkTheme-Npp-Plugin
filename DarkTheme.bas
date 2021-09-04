@@ -335,7 +335,7 @@ sub EnableDisable cdecl()
   
 end sub
 sub AboutDlg cdecl ()
-  Messagebox(nppData._nppHandle,"MyTDT Dark Theme Plugin v1.0 by Mysoft","Notepad++ Dark Theme",MB_ICONINFORMATION)
+  Messagebox(nppData._nppHandle,"MyTDT Dark Theme Plugin v1.0.1 by Mysoft","Notepad++ Dark Theme",MB_ICONINFORMATION)
 end sub
 
 extern "C"

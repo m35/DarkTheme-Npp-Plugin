@@ -105,7 +105,8 @@ function DetourFunction alias "DetourFunction" (zModule as zstring ptr=0,zFuncti
   'Locating Export name
   for CNT as integer = 0 to pExports->NumberOfNames-1
     if strcmp(zName(CNT),zFunctionName)=0 then      
-      var pFunc = pAddress(CNT),OldProt=0
+      var pFunc = pAddress(CNT)
+      dim as DWORD OldProt = 0
       VirtualProtect(pdAddress+CNT,sizeof(dword),PAGE_EXECUTE_READWRITE,@OldProt)
       SetAddress(CNT,pNewFunction)
       VirtualProtect(pdAddress+CNT,sizeof(dword),OldProt,@OldProt)
@@ -130,10 +131,11 @@ function DetourFunction alias "DetourFunction" (zModule as zstring ptr=0,zFuncti
           while pThunkB->u1.AddressOfData            
             dim as IMAGE_IMPORT_BY_NAME ptr pImpAddr = cast(IMAGE_IMPORT_BY_NAME ptr, pThunkB->u1.AddressOfData)
             if pImpAddr = pResult then                  
-              var pFunc = @(pThunkB->u1.AddressOfData),OldProt=0
+              var pFunc = @(pThunkB->u1.AddressOfData)
+              dim as DWORD OldProt = 0
               VirtualProtect(pFunc,sizeof(any ptr),PAGE_EXECUTE_READWRITE,@OldProt)
               if IsBadWritePtr(pFunc,sizeof(any ptr))=0 then
-                pThunkB->u1.AddressOfData = culng(pNewFunction)                
+                pThunkB->u1.AddressOfData = pNewFunction ' implicit conversion allows for 32 or 64 bit
               end if
               VirtualProtect(pFunc,sizeof(any ptr),OldProt,@OldProt)
             end if
